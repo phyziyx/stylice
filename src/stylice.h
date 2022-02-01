@@ -1,13 +1,21 @@
 #ifndef __STYLICE_H__
 #define __STYLICE_H__
 
+#include <stdbool.h>
+
+enum tableStyle {
+	styleDefault = 0,
+	styleMax
+};
+
 typedef struct tableData {
-	int columns_len[16];
-	char delimeter;
-	char columns[2048];
+	int ColumnsLen[16];
+	// int RowCount;
+	enum tableStyle Style;
+	char Rows[2048];
 } table;
 
-void table_init(table *self, const char delimeter);
+bool table_Init(table *self, enum tableStyle style);
 void table_AddRow(table *self, const char *format);
 void table_Print(table *self);
 

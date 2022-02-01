@@ -1,7 +1,6 @@
 #include "stylice.h"
 #include <stdio.h>
 #include <string.h>
-#include <stdbool.h>
 
 static bool isWhitespace(char c) {
 	return (c == '\t' || c == '\0');
@@ -11,52 +10,79 @@ static bool isNewline(char c) {
 	return c == '\n';
 }
 
+bool table_Init(table *self, enum tableStyle style) {
+	if (style < styleDefault || style >= styleMax) {
+		return true;
+	}
+
+	// Reset the table and initialise data
+	static const table
+		emptyTable
+	;
+
+	*self = emptyTable;
+	self->Style = style;
+	return false;
+}
+
 void table_AddRow(table *self, const char *format) {
-	int column_len = 0, columns = 0;
+	int
+		columnLen = 0,
+		column = 0
+	;
+
 	for (size_t idx = 0; idx < strlen(format); ++ idx) {
+		// If not a whitespace and newline, increase the column length
 		if (!isWhitespace(format[idx]) && !isNewline(format[idx])) {
-			++ column_len;
+			++ columnLen;
 			continue;
 		}
-		if (column_len > self->columns_len[columns]) {
-			self->columns_len[columns] = column_len;
+
+		// If the column length is larger than previous
+		if (columnLen > self->ColumnsLen[column]) {
+			self->ColumnsLen[column] = columnLen;
 		}
-		++ columns;
-		column_len = 0;
+
+		++ column;
+		columnLen = 0;
 	}
-	strcat(self->columns, format);
+
+	strcat(self->Rows, format);
+	// ++ self->RowCount;
 }
 
 void table_Print(table *self) {
-	int spaces = 0, column_len = 0, columns = 0;
-	for (size_t idx = 0; idx < strlen(self->columns); ++ idx) {
+	int
+		spaces = 0,
+		columnLen = 0,
+		column = 0
+	;
+
+	for (size_t idx = 0; idx < strlen(self->Rows); ++ idx) {
 		// If not a whitespace or new line, print the character
-		if (!isWhitespace(self->columns[idx]) && !isNewline(self->columns[idx])) {
-			printf("%c", self->columns[idx]);
-			++ column_len;
+		if (!isWhitespace(self->Rows[idx]) && !isNewline(self->Rows[idx])) {
+			printf("%c", self->Rows[idx]);
+			++ columnLen;
 			continue;
 		}
+
 		// If new line, reset column (and move onto the next row)
-		if (isNewline(self->columns[idx])) {
+		if (isNewline(self->Rows[idx])) {
 			printf("\n");
-			columns = column_len = 0;
+			column = columnLen = 0;
 			continue;
 		}
+
 		// Whitespace detected, do the padding as required
-		spaces = (self->columns_len[columns] - column_len);
+		spaces = (self->ColumnsLen[column] - columnLen);
 		do {
-			printf("%c", self->delimeter);
+			printf(" ");
+			++ columnLen;
 		}
 		while (spaces -- > 0);
-		++ columns;
-		column_len = 0;
+
+		++ column;
+		columnLen = 0;
 	}
 	printf("\n");
-}
-
-void table_init(table *self, const char delimeter) {
-	// Reset the table
-	static const table emptyTable;
-	*self = emptyTable;
-	self->delimeter = delimeter;
 }
