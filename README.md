@@ -2,9 +2,12 @@
 
 StyliCe:  A C library for creating stylised tables in Console
 
+## Features
+- Two formatting styles (Default and Compact)
+
 ## Roadmap
 
-- [ ] Add formatting styles
+- [x] Add formatting styles
 - [ ] Variable string length support
 - [ ] Code optimisations, if any
 

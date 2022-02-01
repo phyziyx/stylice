@@ -5,17 +5,20 @@
 
 enum tableStyle {
 	styleDefault = 0,
+	styleCompact = 1,
 	styleMax
 };
 
 typedef struct tableData {
+	bool Header;
 	int ColumnsLen[16];
-	// int RowCount;
+	int ColumnsCount;
+	int RowsCount;
 	enum tableStyle Style;
 	char Rows[2048];
 } table;
 
-bool table_Init(table *self, enum tableStyle style);
+bool table_Init(table *self, enum tableStyle style, bool header);
 void table_AddRow(table *self, const char *format);
 void table_Print(table *self);
 
