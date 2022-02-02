@@ -21,5 +21,7 @@ typedef struct tableData {
 bool table_Init(table *self, enum tableStyle style, bool header);
 void table_AddRow(table *self, const char *format);
 void table_Print(table *self);
+int  table_GetRowCount(table *self);
+int  table_GetColumnCount(table *self);
 
 #endif

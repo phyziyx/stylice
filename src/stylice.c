@@ -16,13 +16,13 @@ static void printSeparator(table *self) {
 		sum = 0
 	;
 
-	idx = sum = self->ColumnsCount + 1;
+	idx = sum = self->ColumnsCount;
 
-	while (-- idx != 0) {
+	while (-- idx >= 0) {
 		sum += self->ColumnsLen[idx];
 	}
 
-	while (sum --) {
+	while (-- sum) {
 		printf("-");
 	}
 	printf("\n");
@@ -123,4 +123,12 @@ void table_Print(table *self) {
 	}
 
 	printf("\n");
+}
+
+int table_GetRowCount(table *self) {
+	return self->RowsCount;
+}
+
+int table_GetColumnCount(table *self) {
+	return self->ColumnsCount;
 }
