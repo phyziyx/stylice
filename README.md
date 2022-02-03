@@ -30,6 +30,13 @@ if (table_Init(&instance, styleDefault, true) == false) {
 
 ![Example](example/example.gif)
 
+### How to build
+
+```bash
+cd .\example\
+gcc -I..\src\ example.c -o example.exe ..\src\stylice.c
+```
+
 ## License
 
 MIT

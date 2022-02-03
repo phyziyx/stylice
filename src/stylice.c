@@ -50,7 +50,11 @@ void table_AddRow(table *self, const char *format) {
 		column = 0
 	;
 
-	for (size_t idx = 0; idx < strlen(format); ++ idx) {
+	for (
+		size_t idx = 0, max = strlen(format);
+		idx < max;
+		++ idx
+	) {
 		// If not a whitespace and newline, increase the column length
 		if (!isWhitespace(format[idx]) && !isNewline(format[idx])) {
 			++ columnLen;
@@ -86,7 +90,11 @@ void table_Print(table *self) {
 		printSeparator(self);
 	}
 
-	for (size_t idx = 0; idx < strlen(self->Rows); ++ idx) {
+	for (
+		size_t idx = 0, max = strlen(self->Rows);
+		idx < max;
+		++ idx
+	) {
 		// If not a whitespace or new line, print the character
 		if (!isWhitespace(self->Rows[idx]) && !isNewline(self->Rows[idx])) {
 			printf("%c", self->Rows[idx]);

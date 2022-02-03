@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "stylice.h"
 
 int main() {
