@@ -52,11 +52,11 @@ void table_AddRow(table *self, const char *format) {
 
 	for (
 		size_t idx = 0, max = strlen(format);
-		idx < max;
+		idx <= max;
 		++ idx
 	) {
 		// If not a whitespace and newline, increase the column length
-		if (!isWhitespace(format[idx]) && !isNewline(format[idx])) {
+		if (!isWhitespace(format[idx]) && idx != max) {
 			++ columnLen;
 			continue;
 		}
@@ -71,6 +71,7 @@ void table_AddRow(table *self, const char *format) {
 	}
 
 	strcat(self->Rows, format);
+	strcat(self->Rows, "\n");
 	++ self->RowsCount;
 	self->ColumnsCount = column;
 }
