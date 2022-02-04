@@ -1,6 +1,4 @@
 #include "stylice.h"
-#include <stdio.h>
-#include <string.h>
 
 static bool isWhitespace(char c) {
 	return (c == '\t' || c == '\0');
@@ -48,9 +46,9 @@ static void printSeparator(table *self) {
 	printf("\n");
 }
 
-void table_Empty(table *self) {
+static void table_Empty(table *self) {
 	static const table
-		emptyTable
+		emptyTable = {false, {0}, 0, 0, styleDefault, (char *) NULL, (size_t) 0, (size_t) 0}
 	;
 
 	*self = emptyTable;
@@ -58,24 +56,47 @@ void table_Empty(table *self) {
 
 bool table_Init(table *self, enum tableStyle style, bool header) {
 	if (style < styleDefault || style >= styleMax) {
-		return true;
+		// Invalid style specified
+		return false;
 	}
+
 
 	table_Empty(self);
 	// Initialise the settings
 	self->Style = style;
 	self->Header = header;
-	return false;
+	self->Capacity = 128 * sizeof(char *);
+	self->RowsPtr = (char *) malloc(self->Capacity);
+	if (self->RowsPtr == NULL) {
+		// Allocation failed
+		return false;
+	}
+	strcpy(self->RowsPtr, "\0");
+	// Successful
+	return true;
+}
+
+void table_Delete(table *self) {
+	free((char *)self->RowsPtr);
+	table_Empty(self);
 }
 
 void table_AddRow(table *self, const char *format) {
 	int
 		columnLen = 0,
-		column = 0
+		column = 0,
+		max = strlen(format)
 	;
 
+	// If the size of memory allocated is insufficient
+	if (self->Capacity <= (self->Total + max)) {
+		self->Capacity = (self->Total + max) * sizeof (char *);
+		char *temp = realloc(self->RowsPtr, self->Capacity);
+		self->RowsPtr = temp;
+	}
+
 	for (
-		size_t idx = 0, max = strlen(format);
+		size_t idx = 0;
 		idx <= max;
 		++ idx
 	) {
@@ -94,10 +115,11 @@ void table_AddRow(table *self, const char *format) {
 		columnLen = 0;
 	}
 
-	strcat(self->Rows, format);
-	strcat(self->Rows, "\n");
+	strcat(self->RowsPtr, format);
+	strcat(self->RowsPtr, "\n");
 	++ self->RowsCount;
 	self->ColumnsCount = column;
+	self->Total += max;
 }
 
 void table_Print(table *self) {
@@ -116,19 +138,19 @@ void table_Print(table *self) {
 	}
 
 	for (
-		size_t idx = 0, max = strlen(self->Rows);
+		size_t idx = 0, max = strlen(self->RowsPtr);
 		idx < max;
 		++ idx
 	) {
 		// If not a whitespace and new line, print the character
-		if (!isWhitespace(self->Rows[idx]) && !isNewline(self->Rows[idx])) {
-			printf("%c", self->Rows[idx]);
+		if (!isWhitespace(self->RowsPtr[idx]) && !isNewline(self->RowsPtr[idx])) {
+			printf("%c", self->RowsPtr[idx]);
 			++ columnLen;
 			continue;
 		}
 
 		// If new line, reset column (and move onto the next row)
-		if (isNewline(self->Rows[idx])) {
+		if (isNewline(self->RowsPtr[idx])) {
 			printf("\n");
 			column = columnLen = 0;
 

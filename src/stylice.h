@@ -4,6 +4,9 @@
 #define MAX_COLUMNS	(16)
 
 #include <stdbool.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 enum tableStyle {
 	styleDefault = 0,
@@ -13,12 +16,14 @@ enum tableStyle {
 };
 
 typedef struct tableData {
-	bool Header;
-	int ColumnsLen[MAX_COLUMNS];
-	int ColumnsCount;
-	int RowsCount;
-	enum tableStyle Style;
-	char Rows[2048];
+	bool	Header;
+	int		ColumnsLen[MAX_COLUMNS];
+	int		ColumnsCount;
+	int		RowsCount;
+	enum	tableStyle Style;
+	char	*RowsPtr;
+	size_t	Capacity;
+	size_t	Total;
 } table;
 
 bool table_Init(table *self, enum tableStyle style, bool header);
@@ -26,5 +31,6 @@ void table_AddRow(table *self, const char *format);
 void table_Print(table *self);
 int  table_GetRowCount(table *self);
 int  table_GetColumnCount(table *self);
+void table_Delete(table *self);
 
 #endif

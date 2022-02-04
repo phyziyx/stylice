@@ -6,12 +6,13 @@ StyliCe:  A C library for creating stylised console tables
 
 - Three formatting styles (Default, Compact and Windows)
 - Header support
-- Upto 16 columns supported (redfine MAX_COLUMNS if you need more or less)
+- Upto 16 columns supported (redefine MAX_COLUMNS if you need more or less)
 
 ## Example
 
 ```c
 printf("\nDefault Style: Header\n");
+table instance;
 if (table_Init(&instance, styleDefault, true) == false) {
     table_AddRow(&instance, "ID\tLocation\tPopulation\tTest");
     table_AddRow(&instance, "01\tKarachi, PK\t15M\tYes");
