@@ -16,16 +16,44 @@ static void printSeparator(table *self) {
 		sum = 0
 	;
 
-	idx = sum = self->ColumnsCount;
+	// If the style is Windows
+	if (self->Style == styleWindows) {
+		// Loop for each column
+		while (idx != self->ColumnsCount) {
+			sum = self->ColumnsLen[idx];
 
-	while (-- idx >= 0) {
+			// Print the dashes of the column length
+			while (sum --) {
+				printf("-");
+			}
+			printf("  ");
+			// Next iteration
+			idx ++;
+		}
+		printf("\n");
+
+		return;
+	}
+
+	idx = sum = self->ColumnsCount;
+	sum *= 2;
+
+	while (-- idx) {
 		sum += self->ColumnsLen[idx];
 	}
 
-	while (-- sum) {
+	while (sum --) {
 		printf("-");
 	}
 	printf("\n");
+}
+
+void table_Empty(table *self) {
+	static const table
+		emptyTable
+	;
+
+	*self = emptyTable;
 }
 
 bool table_Init(table *self, enum tableStyle style, bool header) {
@@ -33,12 +61,8 @@ bool table_Init(table *self, enum tableStyle style, bool header) {
 		return true;
 	}
 
-	// Reset the table and initialise data
-	static const table
-		emptyTable
-	;
-
-	*self = emptyTable;
+	table_Empty(self);
+	// Initialise the settings
 	self->Style = style;
 	self->Header = header;
 	return false;
@@ -55,7 +79,7 @@ void table_AddRow(table *self, const char *format) {
 		idx <= max;
 		++ idx
 	) {
-		// If not a whitespace and newline, increase the column length
+		// If not a whitespace and end of the string, increase the column length
 		if (!isWhitespace(format[idx]) && idx != max) {
 			++ columnLen;
 			continue;
@@ -96,7 +120,7 @@ void table_Print(table *self) {
 		idx < max;
 		++ idx
 	) {
-		// If not a whitespace or new line, print the character
+		// If not a whitespace and new line, print the character
 		if (!isWhitespace(self->Rows[idx]) && !isNewline(self->Rows[idx])) {
 			printf("%c", self->Rows[idx]);
 			++ columnLen;
@@ -119,9 +143,10 @@ void table_Print(table *self) {
 		spaces = (self->ColumnsLen[column] - columnLen);
 		do {
 			printf(" ");
-			++ columnLen;
 		}
 		while (spaces -- > 0);
+		// One extra space between each column
+		printf(" ");
 
 		++ column;
 		columnLen = 0;

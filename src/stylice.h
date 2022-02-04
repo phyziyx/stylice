@@ -1,17 +1,20 @@
 #ifndef __STYLICE_H__
 #define __STYLICE_H__
 
+#define MAX_COLUMNS	(16)
+
 #include <stdbool.h>
 
 enum tableStyle {
 	styleDefault = 0,
 	styleCompact = 1,
+	styleWindows = 2,
 	styleMax
 };
 
 typedef struct tableData {
 	bool Header;
-	int ColumnsLen[16];
+	int ColumnsLen[MAX_COLUMNS];
 	int ColumnsCount;
 	int RowsCount;
 	enum tableStyle Style;

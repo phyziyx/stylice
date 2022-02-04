@@ -1,11 +1,12 @@
 # styliCe
 
-StyliCe:  A C library for creating stylised tables in Console
+StyliCe:  A C library for creating stylised console tables
 
 ## Features
 
-- Two formatting styles (Default and Compact)
+- Three formatting styles (Default, Compact and Windows)
 - Header support
+- Upto 16 columns supported (redfine MAX_COLUMNS if you need more or less)
 
 ## Example
 
@@ -23,7 +24,7 @@ if (table_Init(&instance, styleDefault, true) == false) {
 }
 ```
 
-![Example](example/example.gif)
+![Example](example/example.jpg)
 
 ### How to build
 

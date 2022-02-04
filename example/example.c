@@ -28,16 +28,40 @@ int main() {
 
 	printf("\nCompact Style: No Header\n");
 	if (table_Init(&instance, styleCompact, false) == false) {
-		table_AddRow(&instance, "A\tquick\tbrown\tfox");
-		table_AddRow(&instance, "jumps\tover a\tlazy\tdog");
+		table_AddRow(&instance, "##\tTask\tTime");
+		table_AddRow(&instance, "01\tWake up!\t0630");
+		table_AddRow(&instance, "03\tWrite Code!\t0730");
+		table_AddRow(&instance, "04\tSleep!\t2200");
 		table_Print(&instance);
 		printf("Rows: %d - Columns: %d\n", table_GetRowCount(&instance), table_GetColumnCount(&instance));
 	}
 
 	printf("\nCompact Style: Header\n");
 	if (table_Init(&instance, styleCompact, true) == false) {
-		table_AddRow(&instance, "#\tTask\tTime");
+		table_AddRow(&instance, "##\tTask\tTime");
 		table_AddRow(&instance, "01\tWake up!\t0630");
+		table_AddRow(&instance, "03\tWrite Code!\t0730");
+		table_AddRow(&instance, "04\tSleep!\t2200");
+		table_Print(&instance);
+		printf("Rows: %d - Columns: %d\n", table_GetRowCount(&instance), table_GetColumnCount(&instance));
+	}
+
+	printf("\nWindows Style: Header\n");
+	if (table_Init(&instance, styleWindows, true) == false) {
+		table_AddRow(&instance, "##\tTask\tTime");
+		table_AddRow(&instance, "01\tWake up!\t0630");
+		table_AddRow(&instance, "03\tWrite Code!\t0730");
+		table_AddRow(&instance, "04\tSleep!\t2200");
+		table_Print(&instance);
+		printf("Rows: %d - Columns: %d\n", table_GetRowCount(&instance), table_GetColumnCount(&instance));
+	}
+
+	printf("\nWindows Style: No Header\n");
+	if (table_Init(&instance, styleWindows, false) == false) {
+		table_AddRow(&instance, "##\tTask\tTime");
+		table_AddRow(&instance, "01\tWake up!\t0630");
+		table_AddRow(&instance, "03\tWrite Code!\t0730");
+		table_AddRow(&instance, "04\tSleep!\t2200");
 		table_Print(&instance);
 		printf("Rows: %d - Columns: %d\n", table_GetRowCount(&instance), table_GetColumnCount(&instance));
 	}
