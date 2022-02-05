@@ -17,13 +17,15 @@ enum tableStyle {
 
 typedef struct tableData {
 	bool	Header;
-	int		ColumnsLen[MAX_COLUMNS];
-	int		ColumnsCount;
-	int		RowsCount;
+	int		ColumnsLen[MAX_COLUMNS],
+			ColumnsCount,
+			RowsCount
+	;
 	enum	tableStyle Style;
 	char	*RowsPtr;
-	size_t	Capacity;
-	size_t	Total;
+	size_t	Capacity,
+			Total
+	;
 } table;
 
 bool table_Init(table *self, enum tableStyle style, bool header);

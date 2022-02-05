@@ -77,7 +77,7 @@ bool table_Init(table *self, enum tableStyle style, bool header) {
 }
 
 void table_Delete(table *self) {
-	free((char *)self->RowsPtr);
+	free((char *) self->RowsPtr);
 	table_Empty(self);
 }
 
