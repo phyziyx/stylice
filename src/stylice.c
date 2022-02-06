@@ -54,12 +54,16 @@ static void table_Empty(table *self) {
 	*self = emptyTable;
 }
 
-bool table_Init(table *self, enum tableStyle style, bool header) {
+table *table_Init(enum tableStyle style, bool header) {
 	if (style < styleDefault || style >= styleMax) {
 		// Invalid style specified
-		return false;
+		return NULL;
 	}
 
+	table *self = malloc(1 * sizeof (table));
+	if (self == NULL) {
+		return NULL;
+	}
 
 	table_Empty(self);
 	// Initialise the settings
@@ -69,19 +73,24 @@ bool table_Init(table *self, enum tableStyle style, bool header) {
 	self->RowsPtr = (char *) malloc(self->Capacity);
 	if (self->RowsPtr == NULL) {
 		// Allocation failed
-		return false;
+		return NULL;
 	}
+
 	strcpy(self->RowsPtr, "\0");
 	// Successful
-	return true;
+	return self;
 }
 
 void table_Delete(table *self) {
 	free((char *) self->RowsPtr);
-	table_Empty(self);
+	free(self);
 }
 
 void table_AddRow(table *self, const char *format) {
+	if (self == NULL) {
+		return;
+	}
+
 	int
 		columnLen = 0,
 		column = 0,
@@ -123,6 +132,10 @@ void table_AddRow(table *self, const char *format) {
 }
 
 void table_Print(table *self) {
+	if (self == NULL) {
+		return;
+	}
+
 	int
 		spaces = 0,
 		columnLen = 0,
@@ -182,9 +195,17 @@ void table_Print(table *self) {
 }
 
 int table_GetRowCount(table *self) {
+	if (self == NULL) {
+		return 0;
+	}
+
 	return self->RowsCount;
 }
 
 int table_GetColumnCount(table *self) {
+	if (self == NULL) {
+		return 0;
+	}
+
 	return self->ColumnsCount;
 }
