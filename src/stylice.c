@@ -84,6 +84,7 @@ table *table_Init(enum tableStyle style, bool header) {
 void table_Delete(table *self) {
 	free((char *) self->RowsPtr);
 	free(self);
+	self = NULL;
 }
 
 void table_AddRow(table *self, const char *format) {
